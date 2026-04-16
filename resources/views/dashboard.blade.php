@@ -62,7 +62,7 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-body">
-                <h6 style="font-size:14px;font-weight:600;margin-bottom:12px;">Ventas por mes</h6>
+                <h6 class="fw-600 mb-3" style="font-size:14px;font-weight:600;">Ventas por mes</h6>
                 <div style="display:flex;align-items:flex-end;gap:8px;height:120px;">
                     @foreach($ventasPorMes as $v)
                     @php $maxTotal = collect($ventasPorMes)->max('total') ?: 1; @endphp
@@ -89,7 +89,7 @@
                         @forelse($ultimasVentas as $venta)
                         <tr>
                             <td>
-                                <div style="font-weight:500;">#{{ strtoupper(substr($venta->id, -6)) }}</div>
+                                <div style="font-weight:500;">#{{ str_pad($venta->id, 4, '0', STR_PAD_LEFT) }}</div>
                                 <div style="font-size:11px;color:#9e9d99;">{{ $venta->fecha_venta }}</div>
                             </td>
                             <td style="text-align:right;font-weight:600;">{{ number_format($venta->total, 2, ',', '.') }} €</td>
