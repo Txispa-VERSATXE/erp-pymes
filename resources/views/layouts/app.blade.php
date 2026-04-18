@@ -33,6 +33,26 @@
         .badge-admin { background: #dbeafe; color: #1e40af; }
         .badge-empleado { background: #f1f0ec; color: #6b6a66; }
         .alert-stock { background: #fef3c7; border: 1px solid #fde68a; color: #92400e; border-radius: 8px; padding: 10px 16px; font-size: 13px; }
+
+        /* ── Toast notifications ── */
+        .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+        .toast-erp { display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-radius: 10px; font-size: 13.5px; font-weight: 500; min-width: 280px; max-width: 380px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); animation: slideIn 0.3s ease; }
+        .toast-erp.toast-success { background: #fff; border-left: 4px solid #16a34a; color: #1a1916; }
+        .toast-erp.toast-error   { background: #fff; border-left: 4px solid #dc2626; color: #1a1916; }
+        .toast-erp.toast-warning { background: #fff; border-left: 4px solid #f59e0b; color: #1a1916; }
+        .toast-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 15px; }
+        .toast-success .toast-icon { background: #dcfce7; color: #16a34a; }
+        .toast-error .toast-icon   { background: #fee2e2; color: #dc2626; }
+        .toast-warning .toast-icon { background: #fef3c7; color: #f59e0b; }
+        .toast-close { margin-left: auto; background: none; border: none; color: #9e9d99; cursor: pointer; font-size: 16px; padding: 0; line-height: 1; }
+        .toast-close:hover { color: #1a1916; }
+        .toast-progress { position: absolute; bottom: 0; left: 0; height: 3px; border-radius: 0 0 10px 10px; animation: progress 4s linear forwards; }
+        .toast-success .toast-progress { background: #16a34a; }
+        .toast-error .toast-progress   { background: #dc2626; }
+        .toast-warning .toast-progress { background: #f59e0b; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+        @keyframes progress { from { width: 100%; } to { width: 0%; } }
     </style>
 </head>
 <body>
@@ -96,23 +116,68 @@
         <span style="font-size:12px;color:#9e9d99;">{{ now()->format('d/m/Y') }}</span>
     </div>
     <div class="content">
-        @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <i class="bi bi-check-circle me-2"></i>{{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
-        @if(session('error'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <i class="bi bi-exclamation-circle me-2"></i>{{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
         @yield('content')
     </div>
 </div>
 
+{{-- Toast container --}}
+<div class="toast-container" id="toastContainer"></div>
+
+@if(session('success'))
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        showToast('success', '{{ session('success') }}');
+    });
+</script>
+@endif
+
+@if(session('error'))
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        showToast('error', '{{ session('error') }}');
+    });
+</script>
+@endif
+
+@if(session('warning'))
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        showToast('warning', '{{ session('warning') }}');
+    });
+</script>
+@endif
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function showToast(type, message) {
+    const icons = {
+        success: 'bi-check-lg',
+        error:   'bi-exclamation-lg',
+        warning: 'bi-exclamation-triangle'
+    };
+
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = `toast-erp toast-${type}`;
+    toast.style.position = 'relative';
+    toast.style.overflow = 'hidden';
+    toast.innerHTML = `
+        <div class="toast-icon"><i class="bi ${icons[type]}"></i></div>
+        <span style="flex:1;">${message}</span>
+        <button class="toast-close" onclick="removeToast(this.parentElement)"><i class="bi bi-x"></i></button>
+        <div class="toast-progress"></div>
+    `;
+
+    container.appendChild(toast);
+
+    setTimeout(() => removeToast(toast), 4000);
+}
+
+function removeToast(toast) {
+    toast.style.animation = 'slideOut 0.3s ease forwards';
+    setTimeout(() => toast.remove(), 300);
+}
+</script>
 @yield('scripts')
 </body>
 </html>
