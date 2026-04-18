@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Proveedor;
+use App\Exports\ProveedoresExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class ProveedorController extends Controller
@@ -11,6 +14,18 @@ class ProveedorController extends Controller
     {
         $proveedores = Proveedor::orderBy('created_at', 'desc')->paginate(10);
         return view('proveedores.index', compact('proveedores'));
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new ProveedoresExport, 'proveedores.xlsx');
+    }
+
+    public function exportPdf()
+    {
+        $proveedores = Proveedor::orderBy('created_at', 'desc')->get();
+        $pdf = Pdf::loadView('exports.proveedores-pdf', compact('proveedores'));
+        return $pdf->download('proveedores.pdf');
     }
 
     public function create()

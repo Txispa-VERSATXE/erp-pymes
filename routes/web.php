@@ -22,12 +22,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // ── Exportaciones ──────────────────────────────────────
-    Route::get('/clientes/export/excel', [ClienteController::class, 'exportExcel'])->name('clientes.export.excel');
-    Route::get('/clientes/export/pdf',   [ClienteController::class, 'exportPdf'])->name('clientes.export.pdf');
-    Route::get('/productos/export/excel',[ProductoController::class, 'exportExcel'])->name('productos.export.excel');
-    Route::get('/productos/export/pdf',  [ProductoController::class, 'exportPdf'])->name('productos.export.pdf');
-    Route::get('/ventas/export/excel',   [VentaController::class, 'exportExcel'])->name('ventas.export.excel');
-    Route::get('/ventas/export/pdf',     [VentaController::class, 'exportPdf'])->name('ventas.export.pdf');
+    Route::get('/clientes/export/excel',    [ClienteController::class,   'exportExcel'])->name('clientes.export.excel');
+    Route::get('/clientes/export/pdf',      [ClienteController::class,   'exportPdf'])->name('clientes.export.pdf');
+    Route::get('/productos/export/excel',   [ProductoController::class,  'exportExcel'])->name('productos.export.excel');
+    Route::get('/productos/export/pdf',     [ProductoController::class,  'exportPdf'])->name('productos.export.pdf');
+    Route::get('/ventas/export/excel',      [VentaController::class,     'exportExcel'])->name('ventas.export.excel');
+    Route::get('/ventas/export/pdf',        [VentaController::class,     'exportPdf'])->name('ventas.export.pdf');
+    Route::get('/compras/export/excel',     [CompraController::class,    'exportExcel'])->name('compras.export.excel');
+    Route::get('/compras/export/pdf',       [CompraController::class,    'exportPdf'])->name('compras.export.pdf');
+    Route::get('/proveedores/export/excel', [ProveedorController::class, 'exportExcel'])->name('proveedores.export.excel');
+    Route::get('/proveedores/export/pdf',   [ProveedorController::class, 'exportPdf'])->name('proveedores.export.pdf');
 
     Route::resource('clientes',    ClienteController::class);
     Route::resource('productos',   ProductoController::class);

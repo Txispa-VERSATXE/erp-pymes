@@ -6,6 +6,9 @@ use App\Models\Compra;
 use App\Models\Proveedor;
 use App\Models\Producto;
 use App\Models\DetalleCompra;
+use App\Exports\ComprasExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class CompraController extends Controller
@@ -14,6 +17,18 @@ class CompraController extends Controller
     {
         $compras = Compra::orderBy('created_at', 'desc')->paginate(10);
         return view('compras.index', compact('compras'));
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new ComprasExport, 'compras.xlsx');
+    }
+
+    public function exportPdf()
+    {
+        $compras = Compra::orderBy('created_at', 'desc')->get();
+        $pdf = Pdf::loadView('exports.compras-pdf', compact('compras'));
+        return $pdf->download('compras.pdf');
     }
 
     public function create()
