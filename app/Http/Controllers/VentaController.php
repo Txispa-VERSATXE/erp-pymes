@@ -12,7 +12,7 @@ class VentaController extends Controller
 {
     public function index()
     {
-        $ventas = Venta::orderBy('created_at', 'desc')->get();
+        $ventas = Venta::orderBy('created_at', 'desc')->paginate(10);
         return view('ventas.index', compact('ventas'));
     }
 
@@ -26,20 +26,20 @@ class VentaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'cliente_id'          => 'required',
-            'estado'              => 'required|in:pendiente,pagado,cancelado',
-            'detalles'            => 'required|array|min:1',
+            'cliente_id'             => 'required',
+            'estado'                 => 'required|in:pendiente,pagado,cancelado',
+            'detalles'               => 'required|array|min:1',
             'detalles.*.producto_id' => 'required',
             'detalles.*.cantidad'    => 'required|integer|min:1',
         ]);
 
-        $total = 0;
+        $total    = 0;
         $detalles = [];
 
         foreach ($request->detalles as $detalle) {
-            $producto = Producto::findOrFail($detalle['producto_id']);
-            $subtotal = $producto->precio * $detalle['cantidad'];
-            $total += $subtotal;
+            $producto  = Producto::findOrFail($detalle['producto_id']);
+            $subtotal  = $producto->precio * $detalle['cantidad'];
+            $total    += $subtotal;
 
             $detalles[] = [
                 'producto_id' => $producto->id,
@@ -48,7 +48,6 @@ class VentaController extends Controller
                 'subtotal'    => $subtotal,
             ];
 
-            // Actualizar stock
             $producto->decrement('stock', $detalle['cantidad']);
         }
 

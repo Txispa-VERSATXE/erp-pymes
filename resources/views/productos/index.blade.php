@@ -75,6 +75,11 @@
             </tbody>
         </table>
     </div>
+    @if($productos->hasPages())
+    <div style="padding:16px 20px;border-top:1px solid rgba(0,0,0,0.08);">
+        {{ $productos->links() }}
+    </div>
+    @endif
 </div>
 @endsection
 

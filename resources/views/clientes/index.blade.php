@@ -61,6 +61,11 @@
             </tbody>
         </table>
     </div>
+    @if($clientes->hasPages())
+    <div style="padding:16px 20px;border-top:1px solid rgba(0,0,0,0.08);">
+        {{ $clientes->links() }}
+    </div>
+    @endif
 </div>
 @endsection
 

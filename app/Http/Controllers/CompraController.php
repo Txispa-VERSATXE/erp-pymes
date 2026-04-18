@@ -12,7 +12,7 @@ class CompraController extends Controller
 {
     public function index()
     {
-        $compras = Compra::orderBy('created_at', 'desc')->get();
+        $compras = Compra::orderBy('created_at', 'desc')->paginate(10);
         return view('compras.index', compact('compras'));
     }
 
@@ -26,21 +26,21 @@ class CompraController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'proveedor_id'            => 'required',
-            'estado'                  => 'required|in:pendiente,recibido,cancelado',
-            'detalles'                => 'required|array|min:1',
-            'detalles.*.producto_id'  => 'required',
-            'detalles.*.cantidad'     => 'required|integer|min:1',
-            'detalles.*.costo_unit'   => 'required|numeric|min:0',
+            'proveedor_id'           => 'required',
+            'estado'                 => 'required|in:pendiente,recibido,cancelado',
+            'detalles'               => 'required|array|min:1',
+            'detalles.*.producto_id' => 'required',
+            'detalles.*.cantidad'    => 'required|integer|min:1',
+            'detalles.*.costo_unit'  => 'required|numeric|min:0',
         ]);
 
         $total    = 0;
         $detalles = [];
 
         foreach ($request->detalles as $detalle) {
-            $producto = Producto::findOrFail($detalle['producto_id']);
-            $subtotal = $detalle['costo_unit'] * $detalle['cantidad'];
-            $total   += $subtotal;
+            $producto  = Producto::findOrFail($detalle['producto_id']);
+            $subtotal  = $detalle['costo_unit'] * $detalle['cantidad'];
+            $total    += $subtotal;
 
             $detalles[] = [
                 'producto_id' => $producto->id,
@@ -49,18 +49,17 @@ class CompraController extends Controller
                 'subtotal'    => $subtotal,
             ];
 
-            // Si la compra es recibida actualizamos stock
             if ($request->estado === 'recibido') {
                 $producto->increment('stock', $detalle['cantidad']);
             }
         }
 
         $compra = Compra::create([
-            'proveedor_id'  => $request->proveedor_id,
-            'usuario_id'    => auth()->id(),
-            'fecha_compra'  => now()->toDateString(),
-            'total'         => $total,
-            'estado'        => $request->estado,
+            'proveedor_id' => $request->proveedor_id,
+            'usuario_id'   => auth()->id(),
+            'fecha_compra' => now()->toDateString(),
+            'total'        => $total,
+            'estado'       => $request->estado,
         ]);
 
         foreach ($detalles as $detalle) {

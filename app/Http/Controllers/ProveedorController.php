@@ -9,7 +9,7 @@ class ProveedorController extends Controller
 {
     public function index()
     {
-        $proveedores = Proveedor::orderBy('created_at', 'desc')->get();
+        $proveedores = Proveedor::orderBy('created_at', 'desc')->paginate(10);
         return view('proveedores.index', compact('proveedores'));
     }
 
