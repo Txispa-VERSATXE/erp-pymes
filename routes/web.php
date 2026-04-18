@@ -32,6 +32,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/compras/export/pdf',       [CompraController::class,    'exportPdf'])->name('compras.export.pdf');
     Route::get('/proveedores/export/excel', [ProveedorController::class, 'exportExcel'])->name('proveedores.export.excel');
     Route::get('/proveedores/export/pdf',   [ProveedorController::class, 'exportPdf'])->name('proveedores.export.pdf');
+    Route::get('/inventario/export/excel',  [InventarioController::class,'exportExcel'])->name('inventario.export.excel');
+    Route::get('/inventario/export/pdf',    [InventarioController::class,'exportPdf'])->name('inventario.export.pdf');
 
     Route::resource('clientes',    ClienteController::class);
     Route::resource('productos',   ProductoController::class);

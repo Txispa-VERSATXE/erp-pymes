@@ -13,8 +13,16 @@
 @endif
 
 <div class="card">
-    <div style="padding:16px 20px;border-bottom:1px solid rgba(0,0,0,0.08);">
+    <div style="padding:16px 20px;border-bottom:1px solid rgba(0,0,0,0.08);display:flex;align-items:center;justify-content:space-between;gap:12px;">
         <h2 style="font-size:14px;font-weight:600;margin:0;">Control de inventario</h2>
+        <div class="d-flex gap-2 align-items-center">
+            <a href="{{ route('inventario.export.excel') }}" class="btn btn-sm btn-outline-secondary" style="border-radius:8px;" title="Exportar Excel">
+                <i class="bi bi-file-earmark-excel me-1"></i>Excel
+            </a>
+            <a href="{{ route('inventario.export.pdf') }}" class="btn btn-sm btn-outline-secondary" style="border-radius:8px;" title="Exportar PDF">
+                <i class="bi bi-file-earmark-pdf me-1"></i>PDF
+            </a>
+        </div>
     </div>
     <div class="table-responsive">
         <table class="table table-hover mb-0" style="font-size:13.5px;">

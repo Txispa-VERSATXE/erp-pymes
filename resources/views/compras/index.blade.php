@@ -4,13 +4,21 @@
 
 @section('content')
 <div class="card">
-    <div style="padding:16px 20px;border-bottom:1px solid rgba(0,0,0,0.08);display:flex;align-items:center;justify-content:space-between;">
+    <div style="padding:16px 20px;border-bottom:1px solid rgba(0,0,0,0.08);display:flex;align-items:center;justify-content:space-between;gap:12px;">
         <h2 style="font-size:14px;font-weight:600;margin:0;">Compras ({{ $compras->count() }})</h2>
-        @if(auth()->user()->rol === 'admin')
-        <a href="{{ route('compras.create') }}" class="btn btn-sm" style="background:#1a3a5c;color:#fff;border-radius:8px;">
-            <i class="bi bi-plus-lg me-1"></i>Nueva compra
-        </a>
-        @endif
+        <div class="d-flex gap-2 align-items-center">
+            <a href="{{ route('compras.export.excel') }}" class="btn btn-sm btn-outline-secondary" style="border-radius:8px;" title="Exportar Excel">
+                <i class="bi bi-file-earmark-excel me-1"></i>Excel
+            </a>
+            <a href="{{ route('compras.export.pdf') }}" class="btn btn-sm btn-outline-secondary" style="border-radius:8px;" title="Exportar PDF">
+                <i class="bi bi-file-earmark-pdf me-1"></i>PDF
+            </a>
+            @if(auth()->user()->rol === 'admin')
+            <a href="{{ route('compras.create') }}" class="btn btn-sm" style="background:#1a3a5c;color:#fff;border-radius:8px;">
+                <i class="bi bi-plus-lg me-1"></i>Nueva compra
+            </a>
+            @endif
+        </div>
     </div>
     <div class="table-responsive">
         <table class="table table-hover mb-0" style="font-size:13.5px;">
@@ -66,5 +74,10 @@
             </tbody>
         </table>
     </div>
+    @if($compras->hasPages())
+    <div style="padding:16px 20px;border-top:1px solid rgba(0,0,0,0.08);">
+        {{ $compras->links() }}
+    </div>
+    @endif
 </div>
 @endsection

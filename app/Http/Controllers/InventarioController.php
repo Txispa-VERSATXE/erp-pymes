@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Producto;
+use App\Exports\InventarioExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class InventarioController extends Controller
@@ -12,6 +15,18 @@ class InventarioController extends Controller
         $productos = Producto::orderBy('nombre')->get();
         $alertas   = Producto::whereRaw(['$expr' => ['$lte' => ['$stock', '$umbral_min']]])->get();
         return view('inventario.index', compact('productos', 'alertas'));
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new InventarioExport, 'inventario.xlsx');
+    }
+
+    public function exportPdf()
+    {
+        $productos = Producto::orderBy('nombre')->get();
+        $pdf = Pdf::loadView('exports.inventario-pdf', compact('productos'));
+        return $pdf->download('inventario.pdf');
     }
 
     public function edit(string $id)
