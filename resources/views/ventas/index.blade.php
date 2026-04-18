@@ -26,8 +26,7 @@
                 @forelse($ventas as $venta)
                 @php $cliente = \App\Models\Cliente::find($venta->cliente_id); @endphp
                 <tr>
-                    <td style="font-family:monospace;color:#9e9d99;">#{{ str_pad($venta->id, 4, '0', STR_PAD_LEFT) }}</td>
-                    <td style="font-weight:500;">{{ $cliente->nombre ?? '—' }}</td>
+<td style="font-family:monospace;color:#9e9d99;">#{{ strtoupper(substr($venta->id, -6)) }}</td>                    <td style="font-weight:500;">{{ $cliente->nombre ?? '—' }}</td>
                     <td>{{ $venta->fecha_venta }}</td>
                     <td style="font-family:monospace;font-weight:600;">{{ number_format($venta->total, 2, ',', '.') }} €</td>
                     <td>

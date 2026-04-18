@@ -89,7 +89,7 @@
                         @forelse($ultimasVentas as $venta)
                         <tr>
                             <td>
-                                <div style="font-weight:500;">#{{ str_pad($venta->id, 4, '0', STR_PAD_LEFT) }}</div>
+                                <div style="font-weight:500;">#{{ strtoupper(substr($venta->id, -6)) }}</div>
                                 <div style="font-size:11px;color:#9e9d99;">{{ $venta->fecha_venta }}</div>
                             </td>
                             <td style="text-align:right;font-weight:600;">{{ number_format($venta->total, 2, ',', '.') }} €</td>
