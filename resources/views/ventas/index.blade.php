@@ -4,11 +4,23 @@
 
 @section('content')
 <div class="card">
-    <div style="padding:16px 20px;border-bottom:1px solid rgba(0,0,0,0.08);display:flex;align-items:center;justify-content:space-between;">
-        <h2 style="font-size:14px;font-weight:600;margin:0;">Ventas ({{ $ventas->count() }})</h2>
-        <a href="{{ route('ventas.create') }}" class="btn btn-sm" style="background:#1a3a5c;color:#fff;border-radius:8px;">
-            <i class="bi bi-plus-lg me-1"></i>Nueva venta
-        </a>
+    <div style="padding:16px 20px;border-bottom:1px solid rgba(0,0,0,0.08);display:flex;align-items:center;justify-content:space-between;gap:12px;">
+        <h2 style="font-size:14px;font-weight:600;margin:0;">Ventas (<span id="contador">{{ $ventas->count() }}</span>)</h2>
+        <div class="d-flex gap-2 align-items-center">
+            <div style="display:flex;align-items:center;gap:8px;padding:0 12px;background:#f9f8f5;border:1px solid rgba(0,0,0,0.1);border-radius:8px;height:36px;min-width:220px;">
+                <i class="bi bi-search" style="color:#9e9d99;font-size:13px;"></i>
+                <input id="buscador" type="text" placeholder="Buscar venta…" style="background:none;border:none;outline:none;font-size:13px;color:#1a1916;width:100%;">
+            </div>
+            <select id="filtroEstado" style="height:36px;padding:0 10px;border:1px solid rgba(0,0,0,0.1);border-radius:8px;font-size:13px;color:#1a1916;background:#f9f8f5;cursor:pointer;">
+                <option value="">Todos los estados</option>
+                <option value="pendiente">Pendiente</option>
+                <option value="pagado">Pagado</option>
+                <option value="cancelado">Cancelado</option>
+            </select>
+            <a href="{{ route('ventas.create') }}" class="btn btn-sm" style="background:#1a3a5c;color:#fff;border-radius:8px;">
+                <i class="bi bi-plus-lg me-1"></i>Nueva venta
+            </a>
+        </div>
     </div>
     <div class="table-responsive">
         <table class="table table-hover mb-0" style="font-size:13.5px;">
@@ -25,8 +37,9 @@
             <tbody>
                 @forelse($ventas as $venta)
                 @php $cliente = \App\Models\Cliente::find($venta->cliente_id); @endphp
-                <tr>
-<td style="font-family:monospace;color:#9e9d99;">#{{ strtoupper(substr($venta->id, -6)) }}</td>                    <td style="font-weight:500;">{{ $cliente->nombre ?? '—' }}</td>
+                <tr class="fila-venta" data-estado="{{ $venta->estado }}">
+                    <td style="font-family:monospace;color:#9e9d99;">#{{ strtoupper(substr($venta->id, -6)) }}</td>
+                    <td style="font-weight:500;">{{ $cliente->nombre ?? '—' }}</td>
                     <td>{{ $venta->fecha_venta }}</td>
                     <td style="font-family:monospace;font-weight:600;">{{ number_format($venta->total, 2, ',', '.') }} €</td>
                     <td>
@@ -72,4 +85,36 @@
         </table>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+const buscador = document.getElementById('buscador');
+const filtroEstado = document.getElementById('filtroEstado');
+const filas = document.querySelectorAll('.fila-venta');
+const contador = document.getElementById('contador');
+
+const normalizar = t => t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+
+function filtrar() {
+    const termino = normalizar(buscador.value);
+    const estado = filtroEstado.value.toLowerCase();
+    let visibles = 0;
+
+    filas.forEach(fila => {
+        const texto = normalizar(fila.textContent);
+        const estadoFila = fila.dataset.estado.toLowerCase();
+        const coincideTexto = texto.includes(termino);
+        const coincideEstado = estado === '' || estadoFila === estado;
+        const mostrar = coincideTexto && coincideEstado;
+        fila.style.display = mostrar ? '' : 'none';
+        if (mostrar) visibles++;
+    });
+
+    contador.textContent = visibles;
+}
+
+buscador.addEventListener('input', filtrar);
+filtroEstado.addEventListener('change', filtrar);
+</script>
 @endsection
