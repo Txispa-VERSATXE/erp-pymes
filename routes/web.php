@@ -9,6 +9,7 @@ use App\Http\Controllers\VentaController;
 use App\Http\Controllers\CompraController;
 use App\Http\Controllers\InventarioController;
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\ProveedorController;
 
 // ── Autenticación ──────────────────────────────────────────
 Route::get('/',       [AuthController::class, 'showLogin'])->name('login');
@@ -32,6 +33,9 @@ Route::middleware(['auth'])->group(function () {
 
     // Compras — cualquier usuario autenticado
     Route::resource('compras', CompraController::class);
+
+    // Proveedores — cualquier usuario autenticado
+    Route::resource('proveedores', ProveedorController::class);
 
     // Inventario — cualquier usuario autenticado
     Route::get('/inventario',            [InventarioController::class, 'index'])->name('inventario.index');

@@ -67,6 +67,9 @@
         <a href="{{ route('compras.index') }}" class="nav-item {{ request()->routeIs('compras.*') ? 'active' : '' }}">
             <i class="bi bi-truck"></i> Compras
         </a>
+        <a href="{{ route('proveedores.index') }}" class="nav-item {{ request()->routeIs('proveedores.*') ? 'active' : '' }}">
+            <i class="bi bi-building"></i> Proveedores
+        </a>
         <a href="{{ route('inventario.index') }}" class="nav-item {{ request()->routeIs('inventario.*') ? 'active' : '' }}">
             <i class="bi bi-archive"></i> Inventario
         </a>
