@@ -11,6 +11,12 @@
                 <i class="bi bi-search" style="color:#9e9d99;font-size:13px;"></i>
                 <input id="buscador" type="text" placeholder="Buscar cliente…" style="background:none;border:none;outline:none;font-size:13px;color:#1a1916;width:100%;">
             </div>
+            <a href="{{ route('clientes.export.excel') }}" class="btn btn-sm btn-outline-secondary" style="border-radius:8px;" title="Exportar Excel">
+                <i class="bi bi-file-earmark-excel me-1"></i>Excel
+            </a>
+            <a href="{{ route('clientes.export.pdf') }}" class="btn btn-sm btn-outline-secondary" style="border-radius:8px;" title="Exportar PDF">
+                <i class="bi bi-file-earmark-pdf me-1"></i>PDF
+            </a>
             @if(auth()->user()->rol === 'admin')
             <a href="{{ route('clientes.create') }}" class="btn btn-sm" style="background:#1a3a5c;color:#fff;border-radius:8px;">
                 <i class="bi bi-plus-lg me-1"></i>Nuevo cliente

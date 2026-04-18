@@ -17,6 +17,12 @@
                 <option value="pagado">Pagado</option>
                 <option value="cancelado">Cancelado</option>
             </select>
+            <a href="{{ route('ventas.export.excel') }}" class="btn btn-sm btn-outline-secondary" style="border-radius:8px;" title="Exportar Excel">
+                <i class="bi bi-file-earmark-excel me-1"></i>Excel
+            </a>
+            <a href="{{ route('ventas.export.pdf') }}" class="btn btn-sm btn-outline-secondary" style="border-radius:8px;" title="Exportar PDF">
+                <i class="bi bi-file-earmark-pdf me-1"></i>PDF
+            </a>
             <a href="{{ route('ventas.create') }}" class="btn btn-sm" style="background:#1a3a5c;color:#fff;border-radius:8px;">
                 <i class="bi bi-plus-lg me-1"></i>Nueva venta
             </a>
