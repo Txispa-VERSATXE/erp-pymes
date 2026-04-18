@@ -21,10 +21,18 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::resource('clientes',   ClienteController::class);
-    Route::resource('productos',  ProductoController::class);
-    Route::resource('ventas',     VentaController::class);
-    Route::resource('compras',    CompraController::class);
+    // ── Exportaciones ──────────────────────────────────────
+    Route::get('/clientes/export/excel', [ClienteController::class, 'exportExcel'])->name('clientes.export.excel');
+    Route::get('/clientes/export/pdf',   [ClienteController::class, 'exportPdf'])->name('clientes.export.pdf');
+    Route::get('/productos/export/excel',[ProductoController::class, 'exportExcel'])->name('productos.export.excel');
+    Route::get('/productos/export/pdf',  [ProductoController::class, 'exportPdf'])->name('productos.export.pdf');
+    Route::get('/ventas/export/excel',   [VentaController::class, 'exportExcel'])->name('ventas.export.excel');
+    Route::get('/ventas/export/pdf',     [VentaController::class, 'exportPdf'])->name('ventas.export.pdf');
+
+    Route::resource('clientes',    ClienteController::class);
+    Route::resource('productos',   ProductoController::class);
+    Route::resource('ventas',      VentaController::class);
+    Route::resource('compras',     CompraController::class);
     Route::resource('proveedores', ProveedorController::class);
 
     Route::get('/inventario',           [InventarioController::class, 'index'])->name('inventario.index');

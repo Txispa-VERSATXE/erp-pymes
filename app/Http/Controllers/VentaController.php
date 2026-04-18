@@ -6,6 +6,9 @@ use App\Models\Venta;
 use App\Models\Cliente;
 use App\Models\Producto;
 use App\Models\DetalleVenta;
+use App\Exports\VentasExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class VentaController extends Controller
@@ -14,6 +17,18 @@ class VentaController extends Controller
     {
         $ventas = Venta::orderBy('created_at', 'desc')->paginate(10);
         return view('ventas.index', compact('ventas'));
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new VentasExport, 'ventas.xlsx');
+    }
+
+    public function exportPdf()
+    {
+        $ventas = Venta::orderBy('created_at', 'desc')->get();
+        $pdf = Pdf::loadView('exports.ventas-pdf', compact('ventas'));
+        return $pdf->download('ventas.pdf');
     }
 
     public function create()
