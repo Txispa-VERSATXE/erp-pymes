@@ -8,15 +8,13 @@
         <div class="card">
             <div style="padding:16px 20px;border-bottom:1px solid rgba(0,0,0,0.08);display:flex;align-items:center;justify-content:space-between;">
                 <h2 style="font-size:14px;font-weight:600;margin:0;">
-                    Venta #{{ str_pad($venta->id, 4, '0', STR_PAD_LEFT) }}
+                    Venta #{{ strtoupper(substr($venta->id, -6)) }}
                 </h2>
                 <a href="{{ route('ventas.index') }}" class="btn btn-sm btn-outline-secondary" style="border-radius:8px;">
                     <i class="bi bi-arrow-left me-1"></i>Volver
                 </a>
             </div>
             <div class="card-body p-4">
-
-                {{-- Datos generales --}}
                 <div class="row g-3 mb-4">
                     <div class="col-md-6">
                         <div style="padding:10px 0;border-bottom:1px solid rgba(0,0,0,0.08);">
@@ -29,24 +27,21 @@
                         </div>
                         <div style="padding:10px 0;border-bottom:1px solid rgba(0,0,0,0.08);">
                             <div style="font-size:12px;color:#9e9d99;font-weight:500;">Estado</div>
-                            <div>
-                                <span class="badge rounded-pill
-                                    @if($venta->estado === 'pagado') bg-success
-                                    @elseif($venta->estado === 'cancelado') bg-danger
-                                    @else bg-warning text-dark
-                                    @endif">
-                                    {{ $venta->estado }}
-                                </span>
-                            </div>
+                            <span class="badge rounded-pill
+                                @if($venta->estado === 'pagado') bg-success
+                                @elseif($venta->estado === 'cancelado') bg-danger
+                                @else bg-warning text-dark
+                                @endif">
+                                {{ ucfirst($venta->estado) }}
+                            </span>
                         </div>
                         <div style="padding:10px 0;">
                             <div style="font-size:12px;color:#9e9d99;font-weight:500;">Total</div>
-                            <div style="font-size:20px;font-weight:700;">{{ number_format($venta->total, 2, ',', '.') }} €</div>
+                            <div style="font-size:22px;font-weight:700;">{{ number_format($venta->total, 2, ',', '.') }} €</div>
                         </div>
                     </div>
                 </div>
 
-                {{-- Detalles --}}
                 <h6 style="font-size:13px;font-weight:600;margin-bottom:12px;">Líneas de venta</h6>
                 <div class="table-responsive">
                     <table class="table" style="font-size:13px;">
@@ -79,7 +74,6 @@
                         </tfoot>
                     </table>
                 </div>
-
             </div>
         </div>
     </div>
