@@ -41,10 +41,10 @@
                     </div>
                     <div class="col-md-6">
                         <h6 style="font-size:13px;font-weight:600;color:#6b6a66;margin-bottom:12px;">Historial de ventas</h6>
-                        @forelse($cliente->ventas as $venta)
+                        @forelse(\App\Models\Venta::where('cliente_id', $cliente->id)->get() as $venta)
                         <div style="padding:10px 0;border-bottom:1px solid rgba(0,0,0,0.08);display:flex;justify-content:space-between;align-items:center;">
                             <div>
-                                <div style="font-size:13px;font-weight:500;">#{{ str_pad($venta->id, 4, '0', STR_PAD_LEFT) }}</div>
+                                <div style="font-size:13px;font-weight:500;">#{{ strtoupper(substr($venta->id, -6)) }}</div>
                                 <div style="font-size:11px;color:#9e9d99;">{{ $venta->fecha_venta }}</div>
                             </div>
                             <div class="d-flex align-items-center gap-2">
@@ -54,7 +54,7 @@
                                     @elseif($venta->estado === 'cancelado') bg-danger
                                     @else bg-warning text-dark
                                     @endif">
-                                    {{ $venta->estado }}
+                                    {{ ucfirst($venta->estado) }}
                                 </span>
                             </div>
                         </div>
