@@ -10,6 +10,7 @@ use App\Http\Controllers\CompraController;
 use App\Http\Controllers\InventarioController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\ProveedorController;
+use App\Http\Controllers\PerfilController;
 
 // ── Autenticación ──────────────────────────────────────────
 Route::get('/',       [AuthController::class, 'showLogin'])->name('login');
@@ -20,6 +21,11 @@ Route::post('/logout',[AuthController::class, 'logout'])->name('logout');
 Route::middleware(['auth'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Perfil de usuario
+    Route::get('/perfil',          [PerfilController::class, 'index'])->name('perfil.index');
+    Route::put('/perfil',          [PerfilController::class, 'update'])->name('perfil.update');
+    Route::put('/perfil/password', [PerfilController::class, 'password'])->name('perfil.password');
 
     // ── Exportaciones ──────────────────────────────────────
     Route::get('/clientes/export/excel',    [ClienteController::class,   'exportExcel'])->name('clientes.export.excel');

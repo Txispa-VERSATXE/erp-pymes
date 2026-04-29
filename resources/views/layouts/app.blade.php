@@ -17,7 +17,8 @@
         .sidebar-logo { padding: 24px 20px 16px; border-bottom: 1px solid rgba(255,255,255,0.08); }
         .sidebar-logo h1 { font-size: 17px; font-weight: 700; color: #fff; margin: 0; }
         .sidebar-logo p { font-size: 11px; color: rgba(255,255,255,0.45); margin: 0; }
-        .sidebar-user { padding: 14px 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+        .sidebar-user { padding: 14px 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.15s; }
+        .sidebar-user:hover { background: rgba(255,255,255,0.06); }
         .user-avatar { width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: #fff; flex-shrink: 0; }
         .sidebar-nav { flex: 1; padding: 12px 0; }
         .nav-section-label { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.3); letter-spacing: 0.8px; text-transform: uppercase; padding: 8px 20px 4px; }
@@ -62,13 +63,14 @@
         <h1><i class="bi bi-grid-3x3-gap-fill me-2"></i>ERP PYMES</h1>
         <p>Sistema de gestión empresarial</p>
     </div>
-    <div class="sidebar-user">
+    <a href="{{ route('perfil.index') }}" class="sidebar-user" style="text-decoration:none;">
         <div class="user-avatar">{{ strtoupper(substr(auth()->user()->nombre, 0, 2)) }}</div>
         <div>
             <div style="font-size:13px;font-weight:500;color:#fff;">{{ auth()->user()->nombre }}</div>
             <div style="font-size:11px;color:rgba(255,255,255,0.45);">{{ auth()->user()->rol }}</div>
         </div>
-    </div>
+        <i class="bi bi-chevron-right" style="margin-left:auto;color:rgba(255,255,255,0.3);font-size:11px;"></i>
+    </a>
     <nav class="sidebar-nav">
         <div class="nav-section-label">Principal</div>
         <a href="{{ route('dashboard') }}" class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
