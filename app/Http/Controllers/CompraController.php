@@ -65,7 +65,7 @@ class CompraController extends Controller
             ];
 
             if ($request->estado === 'recibido') {
-                $producto->increment('stock', $detalle['cantidad']);
+                $producto->increment('stock', (int) $detalle['cantidad']);
             }
         }
 

@@ -63,7 +63,7 @@ class VentaController extends Controller
                 'subtotal'    => $subtotal,
             ];
 
-            $producto->decrement('stock', $detalle['cantidad']);
+            $producto->decrement('stock', (int) $detalle['cantidad']);
         }
 
         $venta = Venta::create([
