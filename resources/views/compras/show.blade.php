@@ -8,7 +8,7 @@
         <div class="card">
             <div style="padding:16px 20px;border-bottom:1px solid rgba(0,0,0,0.08);display:flex;align-items:center;justify-content:space-between;">
                 <h2 style="font-size:14px;font-weight:600;margin:0;">
-                    Compra #{{ str_pad($compra->id, 4, '0', STR_PAD_LEFT) }}
+                    Compra #{{ strtoupper(substr($compra->id, -6)) }}
                 </h2>
                 <a href="{{ route('compras.index') }}" class="btn btn-sm btn-outline-secondary" style="border-radius:8px;">
                     <i class="bi bi-arrow-left me-1"></i>Volver
@@ -32,7 +32,7 @@
                                 @elseif($compra->estado === 'cancelado') bg-danger
                                 @else bg-warning text-dark
                                 @endif">
-                                {{ $compra->estado }}
+                                {{ ucfirst($compra->estado) }}
                             </span>
                         </div>
                         <div style="padding:10px 0;">
