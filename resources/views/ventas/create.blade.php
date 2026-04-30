@@ -124,14 +124,17 @@ function añadirLinea() {
     const precio = parseFloat(option.dataset.precio);
     const stock = parseInt(option.dataset.stock);
 
-    if (cantidad > stock) {
-        alert('Stock insuficiente. Stock disponible: ' + stock);
+    const existing = lineas.findIndex(l => l.producto_id === productoId);
+    const cantidadActual = existing >= 0 ? lineas[existing].cantidad : 0;
+    const cantidadTotal = cantidadActual + cantidad;
+
+    if (cantidadTotal > stock) {
+        alert(`Stock insuficiente. Stock disponible: ${stock}. Ya tienes ${cantidadActual} unidades en el pedido.`);
         return;
     }
 
-    const existing = lineas.findIndex(l => l.producto_id === productoId);
     if (existing >= 0) {
-        lineas[existing].cantidad += cantidad;
+        lineas[existing].cantidad = cantidadTotal;
     } else {
         lineas.push({ producto_id: productoId, nombre, precio, cantidad });
     }
@@ -149,7 +152,6 @@ function eliminarLinea(index) {
 function renderLineas() {
     const tbody = document.getElementById('lineasBody');
     const container = document.getElementById('lineasContainer');
-    const emptyRow = document.getElementById('emptyRow');
 
     tbody.innerHTML = '';
     container.innerHTML = '';

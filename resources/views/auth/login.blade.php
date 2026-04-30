@@ -75,7 +75,7 @@
 
         <div style="margin-top:20px;padding:12px;background:#f5f4f0;border-radius:8px;font-size:12px;color:#6b6a66;">
             <strong>Admin:</strong> admin@erp.com / admin123<br>
-            <strong>Empleado:</strong> empleado@erp.com / emp123
+            <strong>Empleado Prueba:</strong> empleado@erp.com / emp123
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
