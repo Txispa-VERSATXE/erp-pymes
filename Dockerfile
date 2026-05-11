@@ -1,7 +1,7 @@
 FROM php:8.3-cli
 
 RUN apt-get update && apt-get install -y \
-    libzip-dev libpng-dev libicu-dev libxml2-dev \
+    libzip-dev libpng-dev libicu-dev libxml2-dev libssl-dev \
     && pecl install mongodb \
     && docker-php-ext-enable mongodb \
     && docker-php-ext-install gd zip intl bcmath
