@@ -2,5 +2,12 @@
   "php": {
     "version": "8.3",
     "extensions": ["mongodb", "gd", "zip", "curl", "mbstring", "xml", "intl", "tokenizer", "ctype", "fileinfo", "openssl", "bcmath"]
+  },
+  "steps": {
+    "extensions": {
+      "commands": [
+        "install-php-extensions mongodb gd zip curl mbstring xml intl tokenizer ctype fileinfo openssl bcmath"
+      ]
+    }
   }
 }
