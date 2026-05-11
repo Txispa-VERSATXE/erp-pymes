@@ -5,7 +5,8 @@ RUN apt-get update && apt-get install -y \
     && pecl install mongodb \
     && docker-php-ext-enable mongodb \
     && docker-php-ext-install gd zip intl bcmath \
-    && a2enmod rewrite
+    && a2dismod mpm_event \
+    && a2enmod mpm_prefork rewrite
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
