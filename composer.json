@@ -81,6 +81,16 @@
         "allow-plugins": {
             "pestphp/pest-plugin": true,
             "php-http/discovery": true
+        },
+        "platform": {
+            "php": "8.3",
+            "ext-gd": "1.0",
+            "ext-mongodb": "2.0",
+            "ext-zip": "1.0",
+            "ext-curl": "1.0",
+            "ext-mbstring": "1.0",
+            "ext-xml": "1.0",
+            "ext-intl": "1.0"
         }
     },
     "minimum-stability": "stable",
