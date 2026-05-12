@@ -101,8 +101,8 @@
 
 <div class="sidebar" id="sidebar">
     <div class="sidebar-logo">
-        <h1><i class="bi bi-grid-3x3-gap-fill me-2"></i>ERP PYMES</h1>
-        <p>Sistema de gestión empresarial</p>
+        <img src="{{ asset('images/wildstack.png') }}" alt="WildStack" style="height:40px;width:auto;filter:brightness(0) invert(1);">
+        <p style="margin-top:6px;">Sistema de gestión empresarial</p>
     </div>
     <a href="{{ route('perfil.index') }}" class="sidebar-user" style="text-decoration:none;">
         <div class="user-avatar">{{ strtoupper(substr(auth()->user()->nombre, 0, 2)) }}</div>
