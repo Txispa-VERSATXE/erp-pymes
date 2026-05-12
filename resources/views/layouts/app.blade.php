@@ -136,7 +136,7 @@
         <a href="{{ route('inventario.index') }}" class="nav-item {{ request()->routeIs('inventario.*') ? 'active' : '' }}">
             <i class="bi bi-archive"></i> Inventario
         </a>
-        @if(auth()->user()->rol === 'admin')
+        @if(in_array(auth()->user()->rol, ['admin', 'masteradmin']))
         <div class="nav-section-label">Sistema</div>
         <a href="{{ route('usuarios.index') }}" class="nav-item {{ request()->routeIs('usuarios.*') ? 'active' : '' }}">
             <i class="bi bi-shield-check"></i> Administración
