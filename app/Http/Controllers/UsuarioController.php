@@ -10,7 +10,10 @@ class UsuarioController extends Controller
 {
     public function index()
     {
-        $usuarios = Usuario::orderBy('created_at', 'desc')->get();
+        // MasterUser no aparece en el listado
+        $usuarios = Usuario::where('rol', '!=', 'masteradmin')
+            ->orderBy('created_at', 'desc')
+            ->get();
         return view('usuarios.index', compact('usuarios'));
     }
 
@@ -42,24 +45,41 @@ class UsuarioController extends Controller
     public function show(string $id)
     {
         $usuario = Usuario::findOrFail($id);
+
+        // Proteger al MasterUser
+        if ($usuario->rol === 'masteradmin') {
+            abort(404);
+        }
+
         return view('usuarios.show', compact('usuario'));
     }
 
     public function edit(string $id)
     {
         $usuario = Usuario::findOrFail($id);
+
+        // Proteger al MasterUser
+        if ($usuario->rol === 'masteradmin') {
+            abort(404);
+        }
+
         return view('usuarios.edit', compact('usuario'));
     }
 
     public function update(Request $request, string $id)
     {
+        $usuario = Usuario::findOrFail($id);
+
+        // Proteger al MasterUser
+        if ($usuario->rol === 'masteradmin') {
+            abort(404);
+        }
+
         $request->validate([
             'nombre' => 'required|string|max:100',
             'email'  => 'required|email',
             'rol'    => 'required|in:admin,empleado',
         ]);
-
-        $usuario = Usuario::findOrFail($id);
 
         $datos = [
             'nombre' => $request->nombre,
@@ -79,7 +99,21 @@ class UsuarioController extends Controller
 
     public function destroy(string $id)
     {
-        Usuario::findOrFail($id)->delete();
+        $usuario = Usuario::findOrFail($id);
+
+        // Proteger al MasterUser
+        if ($usuario->rol === 'masteradmin') {
+            abort(404);
+        }
+
+        // No se puede eliminar a uno mismo
+        if ($usuario->id === auth()->id()) {
+            return redirect()->route('usuarios.index')
+                ->with('error', 'No puedes eliminarte a ti mismo.');
+        }
+
+        $usuario->delete();
+
         return redirect()->route('usuarios.index')
             ->with('success', 'Usuario eliminado correctamente.');
     }
