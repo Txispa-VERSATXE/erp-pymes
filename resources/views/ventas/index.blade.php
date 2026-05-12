@@ -4,37 +4,41 @@
 
 @section('content')
 <div class="card">
-    <div style="padding:16px 20px;border-bottom:1px solid rgba(0,0,0,0.08);display:flex;align-items:center;justify-content:space-between;gap:12px;">
-        <h2 style="font-size:14px;font-weight:600;margin:0;">Ventas (<span id="contador">{{ $ventas->count() }}</span>)</h2>
-        <div class="d-flex gap-2 align-items-center">
-            <div style="display:flex;align-items:center;gap:8px;padding:0 12px;background:#f9f8f5;border:1px solid rgba(0,0,0,0.1);border-radius:8px;height:36px;min-width:220px;">
+    <div style="padding:16px 20px;border-bottom:1px solid rgba(0,0,0,0.08);">
+        <div class="d-flex align-items-center justify-content-between mb-2">
+            <h2 style="font-size:14px;font-weight:600;margin:0;">Ventas (<span id="contador">{{ $ventas->count() }}</span>)</h2>
+            <div class="d-flex gap-2 flex-wrap justify-content-end">
+                <a href="{{ route('ventas.export.excel') }}" class="btn btn-sm btn-outline-secondary" style="border-radius:8px;" title="Exportar Excel">
+                    <i class="bi bi-file-earmark-excel me-1"></i><span class="d-none d-sm-inline">Excel</span>
+                </a>
+                <a href="{{ route('ventas.export.pdf') }}" class="btn btn-sm btn-outline-secondary" style="border-radius:8px;" title="Exportar PDF">
+                    <i class="bi bi-file-earmark-pdf me-1"></i><span class="d-none d-sm-inline">PDF</span>
+                </a>
+                <a href="{{ route('ventas.create') }}" class="btn btn-sm" style="background:#1a3a5c;color:#fff;border-radius:8px;">
+                    <i class="bi bi-plus-lg me-1"></i><span class="d-none d-sm-inline">Nueva venta</span>
+                </a>
+            </div>
+        </div>
+        <div class="d-flex gap-2 flex-wrap">
+            <div style="display:flex;align-items:center;gap:8px;padding:0 12px;background:#f9f8f5;border:1px solid rgba(0,0,0,0.1);border-radius:8px;height:36px;flex:1;min-width:140px;">
                 <i class="bi bi-search" style="color:#9e9d99;font-size:13px;"></i>
                 <input id="buscador" type="text" placeholder="Buscar venta…" style="background:none;border:none;outline:none;font-size:13px;color:#1a1916;width:100%;">
             </div>
-            <select id="filtroEstado" style="height:36px;padding:0 10px;border:1px solid rgba(0,0,0,0.1);border-radius:8px;font-size:13px;color:#1a1916;background:#f9f8f5;cursor:pointer;">
+            <select id="filtroEstado" style="height:36px;padding:0 10px;border:1px solid rgba(0,0,0,0.1);border-radius:8px;font-size:13px;color:#1a1916;background:#f9f8f5;cursor:pointer;min-width:140px;">
                 <option value="">Todos los estados</option>
                 <option value="pendiente">Pendiente</option>
                 <option value="pagado">Pagado</option>
                 <option value="cancelado">Cancelado</option>
             </select>
-            <a href="{{ route('ventas.export.excel') }}" class="btn btn-sm btn-outline-secondary" style="border-radius:8px;" title="Exportar Excel">
-                <i class="bi bi-file-earmark-excel me-1"></i>Excel
-            </a>
-            <a href="{{ route('ventas.export.pdf') }}" class="btn btn-sm btn-outline-secondary" style="border-radius:8px;" title="Exportar PDF">
-                <i class="bi bi-file-earmark-pdf me-1"></i>PDF
-            </a>
-            <a href="{{ route('ventas.create') }}" class="btn btn-sm" style="background:#1a3a5c;color:#fff;border-radius:8px;">
-                <i class="bi bi-plus-lg me-1"></i>Nueva venta
-            </a>
         </div>
     </div>
     <div class="table-responsive">
         <table class="table table-hover mb-0" style="font-size:13.5px;">
             <thead style="background:#f9f8f5;">
                 <tr>
-                    <th style="font-size:11px;color:#9e9d99;text-transform:uppercase;letter-spacing:0.5px;">#</th>
+                    <th class="d-none d-sm-table-cell" style="font-size:11px;color:#9e9d99;text-transform:uppercase;letter-spacing:0.5px;">#</th>
                     <th style="font-size:11px;color:#9e9d99;text-transform:uppercase;letter-spacing:0.5px;">Cliente</th>
-                    <th style="font-size:11px;color:#9e9d99;text-transform:uppercase;letter-spacing:0.5px;">Fecha</th>
+                    <th class="d-none d-md-table-cell" style="font-size:11px;color:#9e9d99;text-transform:uppercase;letter-spacing:0.5px;">Fecha</th>
                     <th style="font-size:11px;color:#9e9d99;text-transform:uppercase;letter-spacing:0.5px;">Total</th>
                     <th style="font-size:11px;color:#9e9d99;text-transform:uppercase;letter-spacing:0.5px;">Estado</th>
                     <th style="font-size:11px;color:#9e9d99;text-transform:uppercase;letter-spacing:0.5px;">Acciones</th>
@@ -44,9 +48,13 @@
                 @forelse($ventas as $venta)
                 @php $cliente = \App\Models\Cliente::find($venta->cliente_id); @endphp
                 <tr class="fila-venta" data-estado="{{ $venta->estado }}">
-                    <td style="font-family:monospace;color:#9e9d99;">#{{ strtoupper(substr($venta->id, -6)) }}</td>
-                    <td style="font-weight:500;">{{ $cliente->nombre ?? '—' }}</td>
-                    <td>{{ $venta->fecha_venta }}</td>
+                    <td class="d-none d-sm-table-cell" style="font-family:monospace;color:#9e9d99;">#{{ strtoupper(substr($venta->id, -6)) }}</td>
+                    <td style="font-weight:500;">
+                        {{ $cliente->nombre ?? '—' }}
+                        <div class="d-md-none" style="font-size:11px;color:#9e9d99;margin-top:2px;">{{ $venta->fecha_venta }}</div>
+                        <div class="d-sm-none" style="font-size:11px;color:#9e9d99;margin-top:1px;">#{{ strtoupper(substr($venta->id, -6)) }}</div>
+                    </td>
+                    <td class="d-none d-md-table-cell">{{ $venta->fecha_venta }}</td>
                     <td style="font-family:monospace;font-weight:600;">{{ number_format($venta->total, 2, ',', '.') }} €</td>
                     <td>
                         @if(auth()->user()->rol === 'admin')
@@ -59,11 +67,7 @@
                             </select>
                         </form>
                         @else
-                        <span class="badge rounded-pill
-                            @if($venta->estado === 'pagado') bg-success
-                            @elseif($venta->estado === 'cancelado') bg-danger
-                            @else bg-warning text-dark
-                            @endif">
+                        <span class="badge rounded-pill @if($venta->estado === 'pagado') bg-success @elseif($venta->estado === 'cancelado') bg-danger @else bg-warning text-dark @endif">
                             {{ $venta->estado }}
                         </span>
                         @endif
@@ -104,27 +108,18 @@ const buscador = document.getElementById('buscador');
 const filtroEstado = document.getElementById('filtroEstado');
 const filas = document.querySelectorAll('.fila-venta');
 const contador = document.getElementById('contador');
-
 const normalizar = t => t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
-
 function filtrar() {
     const termino = normalizar(buscador.value);
     const estado = filtroEstado.value.toLowerCase();
     let visibles = 0;
-
     filas.forEach(fila => {
-        const texto = normalizar(fila.textContent);
-        const estadoFila = fila.dataset.estado.toLowerCase();
-        const coincideTexto = texto.includes(termino);
-        const coincideEstado = estado === '' || estadoFila === estado;
-        const mostrar = coincideTexto && coincideEstado;
+        const mostrar = normalizar(fila.textContent).includes(termino) && (estado === '' || fila.dataset.estado === estado);
         fila.style.display = mostrar ? '' : 'none';
         if (mostrar) visibles++;
     });
-
     contador.textContent = visibles;
 }
-
 buscador.addEventListener('input', filtrar);
 filtroEstado.addEventListener('change', filtrar);
 </script>
