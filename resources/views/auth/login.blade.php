@@ -27,7 +27,7 @@
             margin-bottom: 20px;
         }
         .login-logo img {
-            height: 52px;
+            height: 80px;
             width: auto;
         }
         .btn-primary {
