@@ -9,10 +9,13 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         body { background: #f5f4f0; font-family: 'Segoe UI', sans-serif; }
+
+        /* ── Sidebar ── */
         .sidebar {
             width: 240px; min-height: 100vh; background: #1a3a5c;
-            position: fixed; top: 0; left: 0; z-index: 100;
+            position: fixed; top: 0; left: 0; z-index: 1040;
             display: flex; flex-direction: column;
+            transition: transform 0.25s ease;
         }
         .sidebar-logo { padding: 24px 20px 16px; border-bottom: 1px solid rgba(255,255,255,0.08); }
         .sidebar-logo h1 { font-size: 17px; font-weight: 700; color: #fff; margin: 0; }
@@ -20,15 +23,30 @@
         .sidebar-user { padding: 14px 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.15s; }
         .sidebar-user:hover { background: rgba(255,255,255,0.06); }
         .user-avatar { width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: #fff; flex-shrink: 0; }
-        .sidebar-nav { flex: 1; padding: 12px 0; }
+        .sidebar-nav { flex: 1; padding: 12px 0; overflow-y: auto; }
         .nav-section-label { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.3); letter-spacing: 0.8px; text-transform: uppercase; padding: 8px 20px 4px; }
         .nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 20px; cursor: pointer; color: rgba(255,255,255,0.6); font-size: 13.5px; font-weight: 500; text-decoration: none; border-left: 3px solid transparent; transition: all 0.15s; }
         .nav-item:hover { color: #fff; background: rgba(255,255,255,0.06); }
         .nav-item.active { color: #fff; background: rgba(255,255,255,0.1); border-left-color: #60a5fa; }
         .sidebar-footer { padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.08); }
+
+        /* ── Overlay (móvil) ── */
+        .sidebar-overlay {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 1039;
+        }
+        .sidebar-overlay.active { display: block; }
+
+        /* ── Main content ── */
         .main-content { margin-left: 240px; min-height: 100vh; display: flex; flex-direction: column; }
+
+        /* ── Topbar ── */
         .topbar { background: #fff; border-bottom: 1px solid rgba(0,0,0,0.08); padding: 0 28px; height: 56px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
         .topbar-title { font-size: 16px; font-weight: 600; }
+        .btn-hamburger { display: none; background: none; border: none; font-size: 22px; color: #1a3a5c; padding: 0; line-height: 1; cursor: pointer; margin-right: 12px; }
+
         .content { padding: 24px 28px; flex: 1; }
         .card { border: 1px solid rgba(0,0,0,0.08); border-radius: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
         .badge-admin { background: #dbeafe; color: #1e40af; }
@@ -54,11 +72,34 @@
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
         @keyframes progress { from { width: 100%; } to { width: 0%; } }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 991.98px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .main-content { margin-left: 0; }
+            .btn-hamburger { display: block; }
+            .topbar { padding: 0 16px; }
+            .content { padding: 16px; }
+            .table-responsive { font-size: 13px; }
+            .toast-erp { min-width: 240px; max-width: calc(100vw - 32px); font-size: 13px; }
+            .toast-container { bottom: 16px; right: 16px; left: 16px; }
+        }
+
+        @media (max-width: 575.98px) {
+            .content { padding: 12px; }
+            .topbar-title { font-size: 14px; }
+            .card-body { padding: 12px; }
+            .btn-sm { padding: 3px 8px; font-size: 12px; }
+        }
     </style>
 </head>
 <body>
 
-<div class="sidebar">
+{{-- Overlay para cerrar sidebar en móvil --}}
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<div class="sidebar" id="sidebar">
     <div class="sidebar-logo">
         <h1><i class="bi bi-grid-3x3-gap-fill me-2"></i>ERP PYMES</h1>
         <p>Sistema de gestión empresarial</p>
@@ -114,7 +155,12 @@
 
 <div class="main-content">
     <div class="topbar">
-        <span class="topbar-title">@yield('title', 'Dashboard')</span>
+        <div class="d-flex align-items-center">
+            <button class="btn-hamburger" id="btnHamburger" onclick="toggleSidebar()" aria-label="Menú">
+                <i class="bi bi-list"></i>
+            </button>
+            <span class="topbar-title">@yield('title', 'Dashboard')</span>
+        </div>
         <span style="font-size:12px;color:#9e9d99;">{{ now()->format('d/m/Y') }}</span>
     </div>
     <div class="content">
@@ -122,7 +168,6 @@
     </div>
 </div>
 
-{{-- Toast container --}}
 <div class="toast-container" id="toastContainer"></div>
 
 @if(session('success'))
@@ -151,13 +196,34 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-function showToast(type, message) {
-    const icons = {
-        success: 'bi-check-lg',
-        error:   'bi-exclamation-lg',
-        warning: 'bi-exclamation-triangle'
-    };
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    sidebar.classList.toggle('open');
+    overlay.classList.toggle('active');
+    document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
+}
 
+function closeSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    sidebar.classList.remove('open');
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeSidebar();
+});
+
+document.querySelectorAll('.nav-item').forEach(function(item) {
+    item.addEventListener('click', function() {
+        if (window.innerWidth < 992) closeSidebar();
+    });
+});
+
+function showToast(type, message) {
+    const icons = { success: 'bi-check-lg', error: 'bi-exclamation-lg', warning: 'bi-exclamation-triangle' };
     const container = document.getElementById('toastContainer');
     const toast = document.createElement('div');
     toast.className = `toast-erp toast-${type}`;
@@ -169,9 +235,7 @@ function showToast(type, message) {
         <button class="toast-close" onclick="removeToast(this.parentElement)"><i class="bi bi-x"></i></button>
         <div class="toast-progress"></div>
     `;
-
     container.appendChild(toast);
-
     setTimeout(() => removeToast(toast), 4000);
 }
 
