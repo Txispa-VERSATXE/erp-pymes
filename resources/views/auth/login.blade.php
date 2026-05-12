@@ -24,11 +24,11 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
         .login-logo {
-            width: 44px; height: 44px;
-            background: #1a3a5c;
-            border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
             margin-bottom: 20px;
+        }
+        .login-logo img {
+            height: 52px;
+            width: auto;
         }
         .btn-primary {
             background: #1a3a5c;
@@ -47,7 +47,7 @@
 <body>
     <div class="login-card">
         <div class="login-logo">
-            <i class="bi bi-grid-3x3-gap-fill text-white fs-5"></i>
+            <img src="{{ asset('images/wildstack.png') }}" alt="WildStack">
         </div>
         <h1 style="font-size:22px;font-weight:700;letter-spacing:-0.3px;">Bienvenido</h1>
         <p style="font-size:13px;color:#6b6a66;margin-bottom:28px;">Inicia sesión en tu sistema de gestión</p>
