@@ -2,7 +2,7 @@
 
 Aplicación web desarrollada con **Laravel 13 + MongoDB Atlas**, desplegada en **Railway**.
 
-🌐 **URL de producción:** https://web-production-755fc.up.railway.app
+**URL de producción:** https://web-production-755fc.up.railway.app
 
 ---
 
@@ -74,7 +74,7 @@ CACHE_STORE=array
 QUEUE_CONNECTION=sync
 ```
 
-> ⚠️ Sustituye `USUARIO`, `PASSWORD` y el host del cluster por los datos de tu MongoDB Atlas.  
+> Sustituye `USUARIO`, `PASSWORD` y el host del cluster por los datos de tu MongoDB Atlas.  
 > Si usas MongoDB local, cambia `DB_URI` por `mongodb://127.0.0.1:27017`.
 
 ### 5. Generar la clave de aplicación
